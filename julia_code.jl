@@ -14,6 +14,7 @@ println("Time to download the input data into a matrix of arrays:")
 @btime global MM = [reshape(readdlm("data/MM_"*string(i)*string(j)*".dat"), 1, sz) for i in 1:4, j in 1:4];
 println()
 
+
 # Convert the matrix of arrays into an array of matrices
 
 println("Time to convert the matrix of arrays into an array of matrices:")
@@ -133,10 +134,31 @@ println("Time to apply the function H to the array of matrices:")
 println()
 
 
+println("Time to check positive definite using Julia's built-in function (Choletsky), parallel:")
+# Checking positive definite using characteristic polynomial
+num_threads = Threads.nthreads()
+sz_threaded = Int32(sz / num_threads)
+@btime global HMosdef_noH_par = Folds.collect([isposdef(HM[s]) for s in ((i - 1) * sz_threaded + 1):(i * sz_threaded)] for i in 1:num_threads);
+println()
+
+
 println("Time to check positive definite using Julia's built-in function (Choletsky):")
 # Checking positive definite using Julia's built-in function (Choletsky)
 @btime global HMposdef = [isposdef(HM[s]) for s in 1:sz];
 println()
+
+println("Time to check positive definite using Julia's built-in function (Choletsky), avoiding H, parallel:")
+# Checking positive definite using characteristic polynomial
+num_threads = Threads.nthreads()
+sz_threaded = Int32(sz / num_threads)
+@btime global HMosdef_noH_par = Folds.collect([isposdef(H(MMlist[s])) for s in ((i - 1) * sz_threaded + 1):(i * sz_threaded)] for i in 1:num_threads);
+println()
+
+println("Time to check positive definite using Julia's built-in function (Choletsky), avoiding H:")
+# Checking positive definite using Julia's built-in function (Choletsky)
+@btime global HMposdef = [isposdef(H(MMlist[s])) for s in 1:sz];
+println()
+
 
 # Creating empty arrays to store the non-physical matrices
 nonposdef = Array{Int32}(undef, sz)
@@ -156,6 +178,14 @@ println()
 println("Time to check positive definite using Sylvester's Criterion with determinants calculated as separate functions in Julia:")
 # Checking positive definite using Sylvester's Criterion
 @btime global SCHMposdef = [SCdec(HM[s]) for s in 1:sz];
+println()
+
+
+println("Time to check positive definite using Sylvester's Criterion with determinants calculated as separate functions in Julia avoiding H, parallel:")
+# Checking positive definite using characteristic polynomial
+num_threads = Threads.nthreads()
+sz_threaded = Int32(sz / num_threads)
+@btime global SCHMpossemdef_noH_par = Folds.collect([SCdec_noH(MMlist[s]) for s in ((i - 1) * sz_threaded + 1):(i * sz_threaded)] for i in 1:num_threads);
 println()
 
 println("Time to check positive definite using Sylvester's Criterion with determinants calculated as separate functions in Julia avoiding H:")
@@ -179,7 +209,6 @@ println()
 println("Time to check positive semi-definite using characteristic polynomial avoiding H:")
 # Checking positive definite using characteristic polynomial
 @btime global CPHMpossemdef_noH = [PSD_noH(MMlist[s]) for s in 1:sz];
-println("====$(sum([1 for x in CPHMpossemdef_noH if !x]))")
 println()
 
 println("Time to check positive semi-definite using characteristic polynomial avoiding H in a for-loop:")
@@ -273,10 +302,29 @@ end
 println("The number of non-positive semi-definite matrices (according to characteristic polynomial, avoiding H, parallel) is ", i22, ".")
 println()
 
+
+println("The time to check positive semi-definite by computing eigenvalues, parallel:")
+num_threads = Threads.nthreads()
+sz_threaded = Int32(sz / num_threads)
+@btime global HMev_par = Folds.collect([all(eigvals(HM[s]) .>= 0) for s in ((i - 1) * sz_threaded + 1):(i * sz_threaded)] for i in 1:num_threads);
+println()
+
 println("The time to check positive semi-definite by computing eigenvalues:")
 # Checking positive semi-definite by computing eigenvalues
 @btime global HMev = [all(eigvals(HM[s]) .>= 0) for s in 1:sz];
 println()
+
+println("The time to check positive semi-definite by computing eigenvalues, avoiding H, parallel:")
+num_threads = Threads.nthreads()
+sz_threaded = Int32(sz / num_threads)
+@btime global HMev_par = Folds.collect([all(eigvals(H(MMlist[s])) .>= 0) for s in ((i - 1) * sz_threaded + 1):(i * sz_threaded)]  for i in 1:num_threads);
+println()
+
+println("The time to check positive semi-definite by computing eigenvalues, avoiding H:")
+# Checking positive semi-definite by computing eigenvalues
+@btime global HMev = [all(eigvals(H(MMlist[s])) .>= 0) for s in 1:sz];
+println()
+
 
 println("The time to create an array of all eigenvalues for all matrices:")
 @btime global HMev = [eigvals(HM[s]) for s in 1:sz];
@@ -302,10 +350,3 @@ println()
 println("Checking if the indices of non positive definite (by Choletsky) are the same as the indices of non positive semi-definite (characteristic polynomial):")
 println(nonposdef[1:i0] == nonpossemdefCP[1:i1])
 println()
-
-# printing all non-positive definite matrices
-#println("The non-positive definite matrices (according to Choletsky) are:")
-#HMevnonposdef = [HMev[nonposdef[j]] for j in 1:i0];
-#for np in HMevnonposdef
-#   println(np)
-#end
