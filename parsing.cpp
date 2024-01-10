@@ -31,6 +31,14 @@ double mystrtof(char const*& pen) {
         val = mystrtol(pen, val);
         neg_exp = pen - fracs;
     }
+    if ((*pen | ('E' ^ 'e')) == 'e') {
+        switch (*++pen) {
+        case '+': neg_exp -= static_cast<std::ptrdiff_t>(mystrtol(++pen)); break;
+        case '-': neg_exp += static_cast<std::ptrdiff_t>(mystrtol(++pen)); break;
+        default:  neg_exp -= static_cast<std::ptrdiff_t>(mystrtol(pen));
+        }
+        neg_exp = std::min(std::max(neg_exp, std::ptrdiff_t(-308)), std::ptrdiff_t(323));
+    }
     auto const ret = *(exp_lookup + neg_exp) * val;
     return neg ? -ret : ret;
 }

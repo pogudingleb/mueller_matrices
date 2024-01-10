@@ -1,10 +1,12 @@
+CFLAGS = -std=c++11 -O2
+
 all: matrices
 
 parsing.o:
-	g++ parsing.cpp -std=c++11 -c -o parsing.o
+	g++ parsing.cpp $(CFLAGS) -c -o parsing.o
 
 matrices: parsing.o
-	g++ main.cpp parsing.o -std=c++11 -o matrices
+	g++ main.cpp parsing.o $(CFLAGS) -o matrices
 
 clean:
 	rm matrices
