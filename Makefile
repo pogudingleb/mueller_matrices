@@ -1,4 +1,5 @@
-CFLAGS = -std=c++11 -O2
+EIGEN_PATH = ./eigen
+CFLAGS = -std=c++11 -O2 -I $(EIGEN_PATH)
 
 all: matrices
 

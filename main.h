@@ -8,6 +8,11 @@
 #include <chrono>
 #include <iostream>
 #include <cstdio>
+#include <thread>
+#include <vector>
+
+#include <Eigen/Dense>
+#include <Eigen/Eigenvalues>
 
 const size_t WIDTH = 700;
 const size_t HEIGHT = 600;
