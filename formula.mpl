@@ -41,12 +41,7 @@ tr4_4 := tr4_3 + anticommuting_with1;
 
 squares1x := add([seq(M[1, i]^2, i=2..4)]);
 squaresx1 := add([seq(M[i, 1]^2, i=2..4)]);
-
-tr4_5 := tr4_4 + 1/2 * expand(squares1x^2 + squaresx1^2);
-
-tr4_6 := tr4_5 - 8 * expand(M[1, 1] * corner_det);
-
-tr4_7 := tr4_6 - 4 * expand(M[1, 1] * with_pairs_mixed);
+corner_squaresum := add(row_squaresums);
 
 prod1x2x := M[1, 1] * M[2, 1] + prod1x2xs;
 prod1x3x := M[1, 1] * M[3, 1] + prod1x3xs;
@@ -55,10 +50,11 @@ prod2x3x := M[2, 1] * M[3, 1] - M[2, 2] * M[3, 2] - M[2, 3] * M[3, 3] - M[2, 4] 
 prod2x4x := M[2, 1] * M[4, 1] - M[2, 2] * M[4, 2] - M[2, 3] * M[4, 3] - M[2, 4] * M[4, 4];
 prod3x4x := M[3, 1] * M[4, 1] - M[3, 2] * M[4, 2] - M[3, 3] * M[4, 3] - M[3, 4] * M[4, 4];
 halfmixed_products := expand(-prod1x2x^2 - prod1x3x^2 - prod1x4x^2 + prod2x3x^2 + prod2x4x^2 + prod3x4x^2);
-tr4_8 := expand(tr4_7 + halfmixed_products);
+tr4_5 := tr4_4 + expand(squares1x * (1/2 * squares1x + corner_squaresum));
 
-corner_squaresum := add(row_squaresums);
-products_two_ones := expand(corner_squaresum * squares1x);
-products_four_ones :=expand((M[1, 1]^2 - squaresx1)^2);
-tr4_9 := tr4_8 + products_two_ones - 1/2 * products_four_ones;
-tr4_10 := tr4_9 + M[1, 1]^4 + 1/2 * (M[2, 1]^4 + M[3, 1]^4 + M[4, 1]^4);
+tr4_6 := tr4_5 - 4 * expand(M[1, 1] * (2 * corner_det + with_pairs_mixed));
+
+tr4_7 := expand(tr4_6 + halfmixed_products);
+
+tr4_8 := tr4_7 + expand(M[1, 1]^2 * squaresx1);
+tr4_9 := tr4_8 + 1/2 * (M[1, 1]^4 + M[2, 1]^4 + M[3, 1]^4 + M[4, 1]^4);

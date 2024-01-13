@@ -193,10 +193,8 @@ bool check_pauli(const double* M) {
     double prod1x3x = get<1, 0>(M) * get<3, 0>(M) - get<1, 1>(M) * get<3, 1>(M) - get<1, 2>(M) * get<3, 2>(M) - get<1, 3>(M) * get<3, 3>(M);
     double prod2x3x = get<2, 0>(M) * get<3, 0>(M) - get<2, 1>(M) * get<3, 1>(M) - get<2, 2>(M) * get<3, 2>(M) - get<2, 3>(M) * get<3, 3>(M);
     double halfmixed_products = -pow2(prod0x1x) - pow2(prod0x2x) - pow2(prod0x3x) + pow2(prod1x2x) + pow2(prod1x3x) + pow2(prod2x3x);
-    double products_two_ones = corner_squaresum * squares0x;
-    double products_four_ones = pow2(get<0, 0>(squares) - squaresx0);
   
-    double traceH4 = -2 * det + 0.75 * pow2(traceH2) - 0.5 * row_squaresums_sq - anticommuting_with0 - 0.5 * (pow2(squares0x) + pow2(squaresx0)) + 4 * get<0, 0>(M) * (2 * det123 + with_pairs_mixed) - halfmixed_products - products_two_ones + 0.5 * products_four_ones - pow2(get<0, 0>(squares)) - 0.5 * (pow2(get<1, 0>(squares)) + pow2(get<2, 0>(squares)) + pow2(get<3, 0>(squares)));
+    double traceH4 = -2 * det + 0.75 * pow2(traceH2) - 0.5 * row_squaresums_sq - anticommuting_with0 - squares0x * (0.5 * squares0x + corner_squaresum) + 4 * get<0, 0>(M) * (2 * det123 + with_pairs_mixed) - halfmixed_products - get<0, 0>(squares) * (squaresx0 + 0.5 * get<0, 0>(squares)) - 0.5 * (pow2(get<1, 0>(squares)) + pow2(get<2, 0>(squares)) + pow2(get<3, 0>(squares)));
 
     // converting power sums to symmetric polynomials
     double elem1 = traceH;
