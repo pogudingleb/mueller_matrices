@@ -124,6 +124,89 @@ bool check_choletsky(const double* M) {
     return (llt.info() == Eigen::Success);
 }
 
+// Checker with the formulas based on the properties of Pauli matrices
+bool check_pauli(const double* M) {
+    double traceH = 2 * get<0, 0>(M);
+    
+    double squares[DIM * DIM];
+    // should be a better way with template unrolling
+    squares[0] = pow2(get<0, 0>(M));
+    squares[1] = pow2(get<0, 1>(M));
+    squares[2] = pow2(get<0, 2>(M));
+    squares[3] = pow2(get<0, 3>(M));
+    squares[4] = pow2(get<1, 0>(M));
+    squares[5] = pow2(get<1, 1>(M));
+    squares[6] = pow2(get<1, 2>(M));
+    squares[7] = pow2(get<1, 3>(M));
+    squares[8] = pow2(get<2, 0>(M));
+    squares[9] = pow2(get<2, 1>(M));
+    squares[10] = pow2(get<2, 2>(M));
+    squares[11] = pow2(get<2, 3>(M));
+    squares[12] = pow2(get<3, 0>(M));
+    squares[13] = pow2(get<3, 1>(M));
+    squares[14] = pow2(get<3, 2>(M));
+    squares[15] = pow2(get<3, 3>(M));
+
+    // different aggregations of squares
+    // rowsums for lower-right 3-by-3 corner
+    double row_squaresums[3];
+    row_squaresums[0] = get<1, 1>(squares) + get<1, 2>(squares) + get<1, 3>(squares);
+    row_squaresums[1] = get<2, 1>(squares) + get<2, 2>(squares) + get<2, 3>(squares);
+    row_squaresums[2] = get<3, 1>(squares) + get<3, 2>(squares) + get<3, 3>(squares);
+
+    double squares0x = get<0, 1>(squares) + get<0, 2>(squares) + get<0, 3>(squares);
+    double squaresx0 = get<1, 0>(squares) + get<2, 0>(squares) + get<3, 0>(squares);
+    double corner_squaresum = row_squaresums[0] + row_squaresums[1] + row_squaresums[2];
+
+    double traceH2 = get<0, 0>(squares) + squares0x + squaresx0 + corner_squaresum;
+
+    // computing the determinant of M
+    double det01 = get<0, 2>(M) * get<1, 3>(M) - get<0, 3>(M) * get<1, 2>(M);
+    double det02 = get<0, 2>(M) * get<2, 3>(M) - get<0, 3>(M) * get<2, 2>(M);
+    double det03 = get<0, 2>(M) * get<3, 3>(M) - get<0, 3>(M) * get<3, 2>(M);
+    double det12 = get<1, 2>(M) * get<2, 3>(M) - get<1, 3>(M) * get<2, 2>(M);
+    double det13 = get<1, 2>(M) * get<3, 3>(M) - get<1, 3>(M) * get<3, 2>(M);
+    double det23 = get<2, 2>(M) * get<3, 3>(M) - get<2, 3>(M) * get<3, 2>(M);
+
+    double det012 = get<0, 1>(M) * det12 - get<1, 1>(M) * det02 + get<2, 1>(M) * det01;
+    double det013 = get<0, 1>(M) * det13 - get<1, 1>(M) * det03 + get<3, 1>(M) * det01;
+    double det023 = get<0, 1>(M) * det23 - get<2, 1>(M) * det03 + get<3, 1>(M) * det02;
+    double det123 = get<1, 1>(M) * det23 - get<2, 1>(M) * det13 + get<3, 1>(M) * det12;
+
+    double det = get<0, 0>(M) * det123 - get<1, 0>(M) * det023 + get<2, 0>(M) * det013 - get<3, 0>(M) * det012;
+
+    // other auxiliary computations for traceH3
+    double prod0x1xs = get<0, 1>(M) * get<1, 1>(M) + get<0, 2>(M) * get<1, 2>(M) + get<0, 3>(M) * get<1, 3>(M);
+    double prod0x2xs = get<0, 1>(M) * get<2, 1>(M) + get<0, 2>(M) * get<2, 2>(M) + get<0, 3>(M) * get<2, 3>(M);
+    double prod0x3xs = get<0, 1>(M) * get<3, 1>(M) + get<0, 2>(M) * get<3, 2>(M) + get<0, 3>(M) * get<3, 3>(M);
+    double with_pairs_mixed = get<1, 0>(M) * prod0x1xs + get<2, 0>(M) * prod0x2xs + get<3, 0>(M) * prod0x3xs;
+
+    double traceH3 = get<0, 0>(M) * (1.5 * traceH2 - get<0, 0>(squares)) + 3 * (with_pairs_mixed + det123);
+
+    // auxiliary computation for traceH4
+    double row_squaresums_sq = pow2(row_squaresums[0]) + pow2(row_squaresums[1]) + pow2(row_squaresums[2]);
+    double anticommuting_with0 = get<1, 0>(squares) * (row_squaresums[1] + row_squaresums[2]) + get<2, 0>(squares) * (row_squaresums[0] + row_squaresums[2]) + get<3, 0>(squares) * (row_squaresums[0] + row_squaresums[1]);
+    double prod0x1x = get<0, 0>(M) * get<1, 0>(M) + prod0x1xs;
+    double prod0x2x = get<0, 0>(M) * get<2, 0>(M) + prod0x2xs;
+    double prod0x3x = get<0, 0>(M) * get<3, 0>(M) + prod0x3xs;
+    double prod1x2x = get<1, 0>(M) * get<2, 0>(M) - get<1, 1>(M) * get<2, 1>(M) - get<1, 2>(M) * get<2, 2>(M) - get<1, 3>(M) * get<2, 3>(M);
+    double prod1x3x = get<1, 0>(M) * get<3, 0>(M) - get<1, 1>(M) * get<3, 1>(M) - get<1, 2>(M) * get<3, 2>(M) - get<1, 3>(M) * get<3, 3>(M);
+    double prod2x3x = get<2, 0>(M) * get<3, 0>(M) - get<2, 1>(M) * get<3, 1>(M) - get<2, 2>(M) * get<3, 2>(M) - get<2, 3>(M) * get<3, 3>(M);
+    double halfmixed_products = -pow2(prod0x1x) - pow2(prod0x2x) - pow2(prod0x3x) + pow2(prod1x2x) + pow2(prod1x3x) + pow2(prod2x3x);
+    double products_two_ones = corner_squaresum * squares0x;
+    double products_four_ones = pow2(get<0, 0>(squares) - squaresx0);
+  
+    double traceH4 = -2 * det + 0.75 * pow2(traceH2) - 0.5 * row_squaresums_sq - anticommuting_with0 - 0.5 * (pow2(squares0x) + pow2(squaresx0)) + 4 * get<0, 0>(M) * (2 * det123 + with_pairs_mixed) - halfmixed_products - products_two_ones + 0.5 * products_four_ones - pow2(get<0, 0>(squares)) - 0.5 * (pow2(get<1, 0>(squares)) + pow2(get<2, 0>(squares)) + pow2(get<3, 0>(squares)));
+
+    // converting power sums to symmetric polynomials
+    double elem1 = traceH;
+    double elem2 = 0.5 * (elem1 * traceH - traceH2);
+    double elem3 = (elem2 * traceH - elem1 * traceH2 + traceH3) / 3.;
+    double elem4 = 0.25 * (elem3 * traceH - elem2 * traceH2 + elem1 * traceH3 - traceH4);
+
+    return ((elem1 >= 0) && (elem2 >= 0) && (elem3 >= 0) && (elem4 >= 0));
+}
+
 // --------------------------------
 // Generic runners for PSD checkers
 // --------------------------------
@@ -179,7 +262,8 @@ int main(int argc, char** argv) {
         std::make_pair(std::string("Charpoly avoiding H"), &check_with_charpoly_noh),
         std::make_pair(std::string("Sylvester criterion avoiding H"), &check_with_sylvester_noh),
         std::make_pair(std::string("Eigen's self-adjoint eigensolver"), &check_eignevalues),
-        std::make_pair(std::string("Eigen's Choletsky"), &check_choletsky)
+        std::make_pair(std::string("Eigen's Choletsky"), &check_choletsky),
+        std::make_pair(std::string("Formula via Pauli matrices"), &check_pauli)
     };
 
     if (argc != 3) {
