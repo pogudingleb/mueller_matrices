@@ -46,6 +46,7 @@ curtime = datetime.now()
 fname = f"timings{curtime.year}{curtime.month:02}{curtime.day:02}{curtime.hour:02}{curtime.minute:02}.md"
 with open(fname, "w") as f:
     f.write(f"Runtimes averaged over {num_runs} runs\n")
+    f.write(f"Times reported in the form `mean` ± `stdev`\n")
 
     f.write(f"| Method \ Threads | " + " | ".join(map(str, range(1, max_threads + 1))) + "|\n")
     f.write("|----" * (max_threads + 1) + "|\n")
