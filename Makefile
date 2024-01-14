@@ -22,4 +22,4 @@ test: $(OBJ_FILES)
 
 clean:
 	rm -f $(BINARIES)
-	rm *.o
+	rm -f *.o

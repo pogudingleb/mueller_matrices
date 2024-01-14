@@ -43,7 +43,7 @@ for i, m in enumerate(methods):
             runtime_data[-1][-1].append(run_computation(i, j))
 
 curtime = datetime.now()
-fname = f"timings{curtime.year}{curtime.month:02}{curtime.day:02}{curtime.hour:02}{curtime.minute:02}.md"
+fname = f"timings{curtime.year}_{curtime.month:02}_{curtime.day:02}_{curtime.hour:02}_{curtime.minute:02}.md"
 with open(fname, "w") as f:
     f.write(f"Runtimes averaged over {num_runs} runs\n")
     f.write(f"Times reported in the form `mean` ± `stdev`\n")
