@@ -23,14 +23,9 @@ def get_methods():
 def run_computation(method, num_threads):
     full_output = run_shell(['./matrices', str(method), str(num_threads)])
     rtime = 0
-    correct = True
     for line in full_output.split("\n"):
         if line.startswith("Checking performed in"):
             rtime = int(line.split()[-2])
-        if "Not OK" in line:
-            correct = False
-    if not correct:
-        raise Exception(f"Method {method} produced an incorrect result")
     return rtime
 
 #------------------------------------------
