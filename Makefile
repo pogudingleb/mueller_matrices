@@ -1,5 +1,5 @@
 EIGEN_PATH = ./eigen
-CFLAGS = -std=c++11 -O2 -I $(EIGEN_PATH)
+CFLAGS = -std=c++11 -pthread -O2 -I $(EIGEN_PATH)
 OBJ_FILES = parsing.o checkers.o runners.o
 BINARIES = matrices test
 
