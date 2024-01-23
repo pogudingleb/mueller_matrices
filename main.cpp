@@ -21,8 +21,8 @@ int main(int argc, char** argv) {
     double* matrices = read_matrices();
     auto end = std::chrono::system_clock::now();
 
-    auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-    std::cout << "Matrices read from files in " << elapsed << " milliseconds" << std::endl;
+    auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+    std::cout << "Matrices read from files in " << elapsed << " microseconds" << std::endl;
 
     const size_t NUM_MATRICES = HEIGHT * WIDTH;
     bool* result = (bool*)malloc(sizeof(bool) * NUM_MATRICES);
