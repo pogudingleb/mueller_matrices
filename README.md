@@ -1,6 +1,6 @@
 ## Before compiling
 
-The code uses `Eigen` library for linear algebra in C++. The library should be downloaded from the [website](https://eigen.tuxfamily.org/index.php?title=Main_Page), and the path to library should be inserted to the `EIGEN_PATH` variable in the `Makefile`.
+The code uses `Eigen` library for linear algebra in C++. The library should be downloaded from the [website](https://eigen.tuxfamily.org/index.php?title=Main_Page), and the path to library should be inserted to the `EIGEN_PATH` variable in the `Makefile`, e.g, EIGEN_PATH = ~/include/eigen3.
 
 ## Compiling
 
