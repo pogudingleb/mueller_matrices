@@ -1,25 +1,19 @@
 EIGEN_PATH = ./eigen
-CFLAGS = -std=c++11 -pthread -O2 -I $(EIGEN_PATH)
-OBJ_FILES = parsing.o checkers.o runners.o
+CXX = g++
+CXXFLAGS = -std=c++11 -pthread -O2 -I $(EIGEN_PATH)
+SRC_DIR = src
+SOURCES = $(SRC_DIR)/parsing.cpp $(SRC_DIR)/checkers.cpp $(SRC_DIR)/runners.cpp
+OBJ_FILES = $(SOURCES:.cpp=.o)
 BINARIES = matrices test
 
 all: $(BINARIES)
 
-parsing.o:
-	g++ parsing.cpp $(CFLAGS) -c -o parsing.o
-
-checkers.o:
-	g++ checkers.cpp $(CFLAGS) -c -o checkers.o
-
-runners.o:
-	g++ runners.cpp $(CFLAGS) -c -o runners.o
-
 matrices: $(OBJ_FILES)
-	g++ $(OBJ_FILES) main.cpp $(CFLAGS) -o matrices
+	$(CXX) $(OBJ_FILES) $(SRC_DIR)/main.cpp $(CXXFLAGS) -o matrices
 
 test: $(OBJ_FILES)
-	g++ $(OBJ_FILES) test.cpp $(CFLAGS) -o test
+	$(CXX) $(OBJ_FILES) $(SRC_DIR)/test.cpp $(CXXFLAGS) -o test
 
 clean:
 	rm -f $(BINARIES)
-	rm -f *.o
+	rm -f $(SRC_DIR)/*.o
