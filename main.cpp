@@ -21,8 +21,8 @@ int main(int argc, char** argv) {
     double* matrices = read_matrices();
     auto end = std::chrono::system_clock::now();
 
-    auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
-    std::cout << "Matrices read from files in " << elapsed << " microseconds" << std::endl;
+    auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+    std::cout << "Matrices read from files in " << elapsed << " milliseconds" << std::endl;
 
     const size_t NUM_MATRICES = HEIGHT * WIDTH;
     bool* result = (bool*)malloc(sizeof(bool) * NUM_MATRICES);
@@ -34,8 +34,8 @@ int main(int argc, char** argv) {
         run_checker_parallel(checker_fun, matrices, NUM_MATRICES, result, num_threads);
     }
     end = std::chrono::system_clock::now();
-    elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-    std::cout << "Checking performed in " << elapsed << " milliseconds" << std::endl;
+    elapsed = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+    std::cout << "Checking performed in " << elapsed << " microseconds" << std::endl;
 
     size_t nonphysical_count = 0;
     for (size_t i = 0; i < NUM_MATRICES; ++i) {
