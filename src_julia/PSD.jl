@@ -1,4 +1,4 @@
-# Cheking if a 4x4 Mueller matrix is positive-semidefinite using the Descartes rule of signs applied
+# Cheсking if a 4x4 Mueller matrix is positive-semidefinite using the Descartes rule of signs applied
 # to the characteristic polynomial of the matrix.
 
 # The coefficients of the characteristic polynomial are written explicitly and were
