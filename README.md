@@ -23,7 +23,11 @@ In order to collect the statistics across different methods and different thread
 python3 produce_stats.py num_thread num_runs
 ```
 Here `num_threads` is the largest number of threads to try (so the code will run each method with `1, 2, ..., num_threads` threads) and `num_runs` is the number of runs to preform for averaging the runtime. The default values are `4` and `20`, respectively.
+
+## Timings
+
+The timings reported in the paper T. Novikova, A. Ovchinnikov, G. Pogudin, and J. Ramella-Roman "Time-efficient filtering of polarimetric data by checking physical realizability of experimental Mueller matrices" (2024) are available [here](/timings/timingsMacPC.md)
  
 ## Julia code
 
-An implementation in Julia of the algorithms is located [here](/src_julia/julia_code.jl). A performance report is available [here](/src_julia/julia_code.out)
+An implementation in Julia of the algorithms is located [here](/src_julia/julia_code.jl). A performance report is available [here](/src_julia/julia_code.out).
