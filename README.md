@@ -26,7 +26,7 @@ Here `num_threads` is the largest number of threads to try (so the code will run
 
 ## Timings
 
-The timings reported in the paper T. Novikova, A. Ovchinnikov, G. Pogudin, and J. Ramella-Roman "Time-efficient filtering of polarimetric data by checking physical realizability of experimental Mueller matrices" (2024) are available [here](/timings/timingsMacPC.md)
+The timings reported in the paper T. Novikova, A. Ovchinnikov, G. Pogudin, and J. Ramella-Roman, "Time-efficient filtering of polarimetric data by checking physical realizability of experimental Mueller matrices" (2024) are available [here](/timings/timingsMacPC.md).
  
 ## Julia code
 
