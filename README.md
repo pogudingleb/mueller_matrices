@@ -26,4 +26,4 @@ Here `num_threads` is the largest number of threads to try (so the code will run
  
 ## Julia code
 
-An implementation in Julia of the algorithms is located [here](/src_julia/julia_code.jl). A performance report is available [here](/mueller_matrices/src_julia/julia_code.out)
+An implementation in Julia of the algorithms is located [here](/src_julia/julia_code.jl). A performance report is available [here](/src_julia/julia_code.out)
