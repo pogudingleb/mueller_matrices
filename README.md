@@ -24,3 +24,6 @@ python3 produce_stats.py num_thread num_runs
 ```
 Here `num_threads` is the largest number of threads to try (so the code will run each method with `1, 2, ..., num_threads` threads) and `num_runs` is the number of runs to preform for averaging the runtime. The default values are `4` and `20`, respectively.
  
+## Julia code
+
+An implementation in Julia of the algorithms is located [here](/src_julia/julia_code.jl). A performance report is available [here](/mueller_matrices/src_julia/julia_code.out)
