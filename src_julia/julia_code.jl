@@ -19,7 +19,7 @@ sz_threaded = Int32(sz / num_threads)
 println()
 println("=================================")
 println()
-println("Benchmarking the performance of verifying positive definite and positive semidefinite properties of Mueller matrices using Choletsky, Sylvester's criterion, characteristic polynomial, and eigenvalues. This is done using @btime, which can take some time to run.")
+println("Benchmarking the performance of verifying positive definite and positive semidefinite properties of Mueller matrices using Cholesky, Sylvester's criterion, characteristic polynomial, and eigenvalues. This is done using @btime, which can take some time to run.")
 println()
 
 println("=================================")
@@ -125,7 +125,7 @@ for s in 1:sz
   end
 end
 
-println("- definite matrices (according to Choletsky) is ", Cholesky_count)
+println("- definite matrices (according to Cholesky) is ", Cholesky_count)
 println("-     (the percentage of non-positive definite matrices is ", round(Cholesky_count/sz*100, digits = 3), "%.")
 println()
 
