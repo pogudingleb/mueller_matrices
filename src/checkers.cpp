@@ -19,6 +19,7 @@ inline double pow4(const double x) {
     return y * y;
 }
 
+// Computes the complex coherency matrix H matrix from a Mueller matrix in-place
 void build_eigen_matrix(const double* M, Eigen::Matrix4cd& H) {
     H(0, 0).real(get<0, 0>(M) + get<0, 1>(M) + get<1, 0>(M) + get<1, 1>(M));
     H(0, 0).imag(0);
@@ -70,7 +71,6 @@ void build_eigen_matrix(const double* M, Eigen::Matrix4cd& H) {
 }
 
 // Checker via the charpoly (not computing H directly)
-
 bool check_with_charpoly_noh(const double* M) {
     double C1 = get<0, 0>(M);
 
@@ -84,7 +84,6 @@ bool check_with_charpoly_noh(const double* M) {
 }
 
 // Checker via the Sylvester criterion (not computing H directly)
-
 bool check_with_sylvester_noh(const double* M) {
     double C1 = get<0, 0>(M) + get<1, 1>(M) + get<2, 2>(M) + get<3, 3>(M);
 
@@ -190,7 +189,7 @@ void compute_elementary_symmetric(const double* M, double* result) {
   
     double traceH4 = -2 * det + 0.75 * pow2(traceH2) - 0.5 * row_squaresums_sq - anticommuting_with0 - squares0x * (0.5 * squares0x + corner_squaresum) + 4 * get<0, 0>(M) * (2 * det123 + with_pairs_mixed) - halfmixed_products - get<0, 0>(squares) * (squaresx0 + 0.5 * get<0, 0>(squares)) - 0.5 * (pow2(get<1, 0>(squares)) + pow2(get<2, 0>(squares)) + pow2(get<3, 0>(squares)));
 
-    // converting power sums to symmetric polynomials
+    // converting power sums to symmetric polynomials via the Newton formulas
     result[0] = traceH;
     result[1] = 0.5 * (result[0] * traceH - traceH2);
     result[2] = (result[1] * traceH - result[0] * traceH2 + traceH3) / 3.;
