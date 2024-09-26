@@ -85,7 +85,7 @@ bool check_with_charpoly_noh(const double* M) {
 
 // Checker via the Sylvester criterion (not computing H directly)
 bool check_with_sylvester_noh(const double* M) {
-    double C1 = get<0, 0>(M) + get<1, 1>(M) + get<2, 2>(M) + get<3, 3>(M);
+    double C1 = get<0, 0>(M) + get<0, 1>(M) + get<1, 0>(M) + get<1, 1>(M);
 
     double C2 = pow2(get<0 ,0>(M))+2*get<0 ,0>(M)*get<1 ,0>(M)-pow2(get<0 ,1>(M))-2*get<0 ,1>(M)*get<1 ,1>(M)-pow2(get<0 ,2>(M))-2*get<0 ,2>(M)*get<1 ,2>(M)-pow2(get<0 ,3>(M))-2*get<0 ,3>(M)*get<1 ,3>(M)+pow2(get<1 ,0>(M))-pow2(get<1 ,1>(M))-pow2(get<1 ,2>(M))-pow2(get<1 ,3>(M));
 
