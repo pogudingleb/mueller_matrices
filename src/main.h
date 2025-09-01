@@ -11,6 +11,9 @@
 #include <random>
 #include <thread>
 #include <vector>
+#include <complex>
+#include <cmath>
+#include <iomanip>
 
 #include <Eigen/Dense>
 #include <Eigen/Eigenvalues>
@@ -45,3 +48,7 @@ const std::vector<std::pair<std::string, PSDChecker*> > checkers{
 // generic functions to run checkers on data
 void run_checker_seq(PSDChecker* checker, double* matrices, size_t num_matrices, bool* result);
 void run_checker_parallel(PSDChecker* checker, double* matrices, size_t num_matrices, bool* result, size_t num_threads);
+
+// solver for quartic equations
+double solve_cubic_real(double p, double q, double r);
+void ferrari_method(double* coeffs, double* result);
